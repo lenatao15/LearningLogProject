@@ -1,0 +1,27 @@
+{% extends "MainApp/base.html" %}
+
+{% block page_header %}
+<h1>Topics</h1>
+{% endblock page_header %}
+
+{% block content %}
+
+<!--In standard HTML, a bulleted list is called an unordered list
+    and is indicated by the tags <ul></ul>. -->
+<div class="list-group border-bottom pb-2 mb-4">
+  <!-- for loop to loop through each topic
+       NOTE: not like python, needs a endfor -->
+  {% for topic in all_topics %}
+
+  <!-- Make the entire row a clickable link with a hover effect -->
+  <a href="{% url 'MainApp:topic' topic.id %}" class="list-group-item list-group-item-action">
+    {{ topic.text }}
+  </a>
+  {% empty %} <!-- if the list is empty then display message-->
+  <div class="list-group-item border-0">No topics have been added yet.</div>
+  {% endfor %}
+</div>
+
+<a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary">Add a new topic</a>
+
+{% endblock content %}
