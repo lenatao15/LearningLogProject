@@ -1,33 +1,44 @@
 {% extends "MainApp/base.html" %}
 
 {% block page_header %}
-<h1>{{ topic }}</h1>
+<div class="mb-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item"><a href="{% url 'MainApp:topics' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active">{{ topic.text }}</li>
+        </ol>
+    </nav>
+    <div class="row align-items-center">
+        <div class="col">
+            <h1 class="h1 mb-0">{{ topic.text }}</h1>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'MainApp:new_entry' topic.id %}" class="btn btn-primary px-4">+ New Entry</a>
+        </div>
+    </div>
+</div>
 {% endblock page_header %}
 
 {% block content %}
-
-<p>Topic: {{ topic }} </p>
-
-
-{% for entry in entries %}
-<div class="card mb-3">
-  <!-- Card header with timestamp and edit link -->
-  <h4 class="card-header">
-    {{ entry.date_added|date:'M d, Y H:i' }}
-    <small><a href="{% url 'MainApp:edit_entry' entry.id %}">
-        edit entry</a></small>
-  </h4>
-  <!-- Card body with entry text -->
-  <div class="card-body">{{ entry.text|linebreaks }}</div>
+<div class="entries-stream">
+    {% for entry in entries %}
+        <div class="card p-4 border-0 mb-4 shadow-sm">
+            <div class="card-body p-0">
+                <div class="entry-text mb-4" style="font-size: 1.125rem; color: var(--text-secondary);">
+                    {{ entry.text|linebreaks }}
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-secondary small font-weight-medium">
+                        Added {{ entry.date_added|date:'M d, Y' }}
+                    </span>
+                    <a href="{% url 'MainApp:edit_entry' entry.id %}" class="btn btn-link btn-sm text-primary p-0">Edit entry</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="text-center py-5">
+            <p class="text-secondary">No entries found for this topic yet.</p>
+        </div>
+    {% endfor %}
 </div>
-{% empty %} <!-- if the list is empty then display message-->
-<p> There are no entries for this topic yet.
-<p>
-  {% endfor %}
-
-<p>
-  <a href="{% url 'MainApp:new_entry' topic.id %}">Add new entry</a>
-</p>
-
-
 {% endblock content %}

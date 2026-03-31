@@ -1,27 +1,33 @@
 {% extends "MainApp/base.html" %}
 
 {% block page_header %}
-<h1>Topics</h1>
+<div class="row align-items-center mb-5">
+    <div class="col">
+        <h1 class="h2 mb-1">My Dashboard</h1>
+        <p class="text-secondary small mb-0">Manage and track your active learning topics.</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary px-4">+ Create Topic</a>
+    </div>
+</div>
 {% endblock page_header %}
 
 {% block content %}
-
-<!--In standard HTML, a bulleted list is called an unordered list
-    and is indicated by the tags <ul></ul>. -->
-<div class="list-group border-bottom pb-2 mb-4">
-  <!-- for loop to loop through each topic
-       NOTE: not like python, needs a endfor -->
-  {% for topic in all_topics %}
-
-  <!-- Make the entire row a clickable link with a hover effect -->
-  <a href="{% url 'MainApp:topic' topic.id %}" class="list-group-item list-group-item-action">
-    {{ topic.text }}
-  </a>
-  {% empty %} <!-- if the list is empty then display message-->
-  <div class="list-group-item border-0">No topics have been added yet.</div>
-  {% endfor %}
+<div class="row">
+    {% for topic in all_topics %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">{{ topic.text }}</h5>
+                    <p class="text-secondary small mb-4">Last update: {{ topic.date_added|date:'M d' }}</p>
+                    <a href="{% url 'MainApp:topic' topic.id %}" class="btn btn-outline-light btn-block btn-sm py-2">Open Log</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-secondary">Your dashboard is empty. Create your first topic to get started.</p>
+        </div>
+    {% endfor %}
 </div>
-
-<a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary">Add a new topic</a>
-
 {% endblock content %}

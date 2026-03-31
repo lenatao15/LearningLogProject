@@ -26,6 +26,7 @@ def topic(request, topic_id):
 
     return render(request, 'MainApp/topic.html', context)
 
+
 @login_required
 def new_topic(request):
     if request.method != 'POST':

@@ -1,77 +1,150 @@
 {% load bootstrap4 %}
-
 <!doctype html>
-
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1,
-          shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Learning Log</title>
-
     {% bootstrap_css %}
-    {% bootstrap_javascript jquery='full' %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-light: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text-main: #111827;
+            --text-secondary: #4B5563;
+        }
 
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-secondary) !important;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: var(--primary) !important; }
+
+        .card {
+            background: var(--card-bg);
+            border: 0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border: 0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-outline-light {
+            border: 1px solid #E5E7EB;
+            color: var(--text-secondary);
+            border-radius: 0.75rem;
+        }
+
+        .btn-outline-light:hover {
+            background: #F3F4F6;
+            color: var(--text-main);
+            border-color: #D1D5DB;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.025em; color: var(--text-main); }
+        
+        .breadcrumb { background: transparent; padding-left: 0; }
+        .breadcrumb-item a { color: var(--primary); font-weight: 500; }
+        
+        footer { padding: 4rem 0; color: #9CA3AF; font-size: 0.875rem; }
+    </style>
+    {% bootstrap_javascript jquery='full' %}
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+    <nav class="navbar navbar-expand-md fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'MainApp:index'%}">LearningLog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <a class="navbar-brand" href="{% url 'MainApp:index'%}">Learning Log</a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'MainApp:topics'%}">My Topics</a>
+                    </li>
+                </ul>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'MainApp:topics'%}">Topics</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-
-                <li class="nav-item">
-                    <span class="navbar-text">Hello, {{ user.username }}.</span>
-                </li>
-                <li class="nav-item">
-                    <form action="{% url 'users:logout' %}" method="post" class="form-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-link"
-                            style="background: transparent; border: none; cursor: pointer;">Log out</button>
-                    </form>
-                </li>
-
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'users:register' %}">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'users:login' %}">Log in</a>
-                </li>
-                {% endif %}
-            </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="navbar-text mr-4 text-dark font-weight-medium">Hi, {{ user.username }}!</span>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{% url 'users:logout' %}" method="post" class="m-0">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm px-3 py-2">Sign out</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="{% url 'users:register' %}">Register</a>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <a class="btn btn-primary btn-sm px-4 py-2" href="{% url 'users:login' %}">Log in</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-
     </nav>
 
-    <main role="main" class="container">
-        <div class="pb-2 mb-2 border-bottom">
-            {% block page_header %}{% endblock page_header %}
-        </div>
-
-        <div>
-            {% block content %}{% endblock content %}
-        </div>
+    <main role="main" class="container" style="margin-top: 100px;">
+        {% block page_header %}{% endblock page_header %}
+        {% block content %}{% endblock content %}
     </main>
 
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2026 LearningLog. Created for continuous growth.</p>
+        </div>
+    </footer>
 </body>
-
-
-
-
 </html>
